@@ -37,6 +37,7 @@
   (let [pairs (map vector
                    ; xxxx it's wrong to split them on commas
                    ; they're lists of strings like "0","foo, the bar","baz","etc"
+                   ; TODO split on "\",\""
                    (split header-line #",")
                    (split card-line #","))]
     (into {}
