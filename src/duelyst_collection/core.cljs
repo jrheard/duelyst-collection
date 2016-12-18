@@ -26,50 +26,50 @@
 (defonce app-state (r/atom (make-app-state)))
 
 (def csv-field-parsers
-  {:count     js/parseInt
-   :prismatic boolean
-   :cost      js/parseInt
-   :de-value  js/parseInt})
+  [[:count js/parseInt]
+   [:name str]
+   [:faction str]
+   [:rarity str]
+   [:prismatic boolean]
+   [:cost js/parseInt]
+   [:de-value js/parseInt]])
 
-(defn parse-card-csv-line [header-line card-line]
-  (js/console.log header-line)
+(defn parse-csv-card-line [card-line]
   (js/console.log card-line)
-  (let [pairs (map vector
-                   ; xxxx it's wrong to split them on commas
-                   ; they're lists of strings like "0","foo, the bar","baz","etc"
-                   ; TODO split on "\",\""
-                   (split header-line #",")
-                   (split card-line #","))]
-    (into {}
-          (map (fn [[name value]]
-                 (let [parsed-name (-> name
-                                       read-string
-                                       lower-case
-                                       (replace #" " "-")
-                                       keyword)
-                       parsed-value (read-string value)]
 
-                   [parsed-name
-                    (if (contains? csv-field-parsers parsed-name)
-                      ((csv-field-parsers parsed-name) parsed-value)
-                      parsed-value)])))
-          pairs)))
+  (let [fields (-> card-line
+                   (subs 1 (- (count card-line)
+                              2))
+                   (split #"\",\""))]
+    (into {}
+          (map (fn [[[name parse-fn] value]]
+                 [name (parse-fn value)])
+
+               (map vector csv-field-parsers fields)))))
+
+(defn validate-csv-header [header-line]
+  (assert (= (as-> header-line $
+                   (split $ #",")
+                   (map read-string $)
+                   (map lower-case $)
+                   (map #(replace % #" " "-") $)
+                   (map keyword $))
+             [:count :name :faction :rarity :prismatic :cost :de-value])))
 
 (defn handle-my-cards [response]
   (let [csv-lines (as-> response $
                         (split $ #"\n")
                         (drop 3 $))
-        header-line (first csv-lines)
+        _ (validate-csv-header (first csv-lines))
         card-lines (rest csv-lines)
-        parsed-cards (map #(parse-card-csv-line header-line %)
-                          card-lines)]
+        parsed-cards (map parse-csv-card-line card-lines)]
 
     (swap! app-state assoc :my-cards parsed-cards)))
 
 ; XXXX no standardized card format yet
 (defn render-card-list [cards]
   [:ul
-   (for [card (@app-state :all-cards)]
+   (for [card cards]
      ^{:key (card :id)} [:li (card :name)])])
 
 (defn cards-you-own []
