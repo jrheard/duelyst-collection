@@ -28,5 +28,7 @@
         :ret :card/card)
 
 (comment
-  (map parse-card (get-card-cards))
+  (map parse-card (get-raw-cards))
   )
+
+

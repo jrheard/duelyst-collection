@@ -23,3 +23,8 @@ ahead of time.
 
 matter of fact, i like that a lot. i'll do that now, i think it'll make reasoning about parsing
 / specs / etc more sane.
+
+
+lol oh shit i think i don't even need the listlyst dump, whoops
+
+i uh guess i should delete that file
