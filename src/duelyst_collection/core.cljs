@@ -1,7 +1,7 @@
 (ns duelyst-collection.core
   (:require [ajax.core :refer [GET]]
             [clojure.reader :refer [read-string]]
-            [clojure.string :refer [split lower-case]]
+            [clojure.string :refer [split lower-case replace]]
             [reagent.core :as r]))
 
 (defn make-app-state []
@@ -25,14 +25,29 @@
 
 (defonce app-state (r/atom (make-app-state)))
 
+(def csv-field-parsers
+  {:count     js/parseInt
+   :prismatic boolean
+   :cost      js/parseInt
+   :de-value  js/parseInt})
+
 (defn parse-card-csv-line [header-line card-line]
   (let [pairs (map vector
                    (split header-line #",")
                    (split card-line #","))]
     (into {}
           (map (fn [[name value]]
-                 [(keyword (lower-case (read-string name)))
-                  (read-string value)]))
+                 (let [parsed-name (-> name
+                                       read-string
+                                       lower-case
+                                       (replace #" " "-")
+                                       keyword)
+                       parsed-value (read-string value)]
+
+                   [parsed-name
+                    (if (contains? csv-field-parsers parsed-name)
+                      ((csv-field-parsers parsed-name) parsed-value)
+                      parsed-value)])))
           pairs)))
 
 (defn handle-my-cards [response]
