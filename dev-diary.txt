@@ -1,0 +1,25 @@
+12/18/16
+
+working on a little cljs app that parses your collection csv and tells you what percentage
+of the total collection you've got so far
+
+i want to be able to answer these questions:
+
+* % total collection complete
+* number of packs i've opened, measured in average-pack's-worth-of-spirit
+* amount of spirit required to complete collection
+* number of packs remaining to complete collection, measured in APWOS
+* the above broken down per set (classic, battle pets, recent expasion)
+* the above broken down per faction
+* the above broken down per faction and set
+
+there are two inputs we're dealing with:
+1) the master list of cards, taken from listlyst
+2) a particular player's collection CSV file, output from one of the duelyst client scripts
+
+right now #1 is being fetched from an all_cards.json file i've included in resources/public;
+i think that it would make more sense if i went ahead and converted that file to cljs
+ahead of time.
+
+matter of fact, i like that a lot. i'll do that now, i think it'll make reasoning about parsing
+/ specs / etc more sane.
