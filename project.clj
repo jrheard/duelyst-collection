@@ -6,16 +6,18 @@
 
   :min-lein-version "2.7.1"
 
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0-alpha14"]
                  [org.clojure/clojurescript "1.9.229"]
                  [org.clojure/core.async "0.2.391"
                   :exclusions [org.clojure/tools.reader]]
 
                  [cljs-ajax "0.5.8"]
                  [reagent "0.6.0"]
-                 [figwheel-sidecar "0.5.4-6"]
 
-                 ]
+                 [clj-http "2.3.0"]
+                 [cheshire "5.6.3"]
+
+                 [figwheel-sidecar "0.5.4-6"]]
 
   :plugins [
             [lein-cljsbuild "1.1.4" :exclusions [[org.clojure/clojure]]]]
@@ -106,7 +108,7 @@
                    ;; for CIDER
                    ;; :plugins [[cider/cider-nrepl "0.12.0"]]
                    :repl-options {; for nREPL dev you really need to limit output
-                                  :init (set! *print-length* 50)
+                                  ;:init (set! *print-length* 50)
                                   :nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}}
 
 )

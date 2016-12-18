@@ -4,6 +4,9 @@
     [clojure.spec :as s]
     [clojure.string :refer [split lower-case replace]]))
 
+; TODO change to cljc
+; actually just move the specs to a cljc spec file
+
 ; here's an example card from json:
 ; {
 ; "description": "Turn a 2x2 area into Shadow Creep.",
