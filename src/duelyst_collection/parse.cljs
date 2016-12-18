@@ -1,6 +1,7 @@
 (ns duelyst-collection.parse
   (:require
     [clojure.reader :refer [read-string]]
+    [clojure.spec :as s]
     [clojure.string :refer [split lower-case replace]]))
 
 ; here's an example card:
@@ -18,6 +19,9 @@
 ; "rarity": "Basic"
 ; }
 
+
+(s/def ::card (s/keys :req [::count ::name ::faction ::rarity ::pristmatic ::cost ::de-value]))
+
 (def csv-field-parsers
   [[:count js/parseInt]
    [:name str]
@@ -28,7 +32,7 @@
    [:de-value js/parseInt]])
 
 (defn parse-csv-card-line [card-line]
-  (js/console.log card-line)
+  ;(js/console.log card-line)
 
   (let [fields (-> card-line
                    (subs 1 (- (count card-line)
@@ -42,12 +46,10 @@
 
 (defn validate-csv-header [header-line]
   (assert (= (as-> header-line $
+                   (str $)
                    (split $ #",")
-                   (map read-string $)
-                   (map lower-case $)
-                   (map #(replace % #" " "-") $)
-                   (map keyword $))
-             [:count :name :faction :rarity :prismatic :cost :de-value])))
+                   (map read-string $))
+             ["Count", "Name", "Faction", "Rarity", "Prismatic", "Cost", "DE Value"])))
 
 (defn parse-collection-csv [csv-collection-string]
   (let [csv-lines (as-> csv-collection-string $

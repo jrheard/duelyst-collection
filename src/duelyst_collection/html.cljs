@@ -5,6 +5,7 @@
 (defn render-card-list [cards]
   [:ul
    (for [card cards]
+     ; XXX not all cards have an id, sometimes cards have the same name (fix?)
      ^{:key (card :id)} [:li (card :name)])])
 
 (defn cards-you-own [app-state]
