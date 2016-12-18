@@ -32,7 +32,11 @@
    :de-value  js/parseInt})
 
 (defn parse-card-csv-line [header-line card-line]
+  (js/console.log header-line)
+  (js/console.log card-line)
   (let [pairs (map vector
+                   ; xxxx it's wrong to split them on commas
+                   ; they're lists of strings like "0","foo, the bar","baz","etc"
                    (split header-line #",")
                    (split card-line #","))]
     (into {}
@@ -53,25 +57,48 @@
 (defn handle-my-cards [response]
   (let [csv-lines (as-> response $
                         (split $ #"\n")
-                        (drop 3 $)
-                        (take 10 $))
+                        (drop 3 $))
         header-line (first csv-lines)
         card-lines (rest csv-lines)
         parsed-cards (map #(parse-card-csv-line header-line %)
                           card-lines)]
 
-    (js/console.log (take 10 parsed-cards))
-
     (swap! app-state assoc :my-cards parsed-cards)))
-(defn foo []
-  ;(js/console.log (clj->js (first (@app-state :all-cards))))
+
+; XXXX no standardized card format yet
+(defn render-card-list [cards]
   [:ul
    (for [card (@app-state :all-cards)]
-     ^{:key (card :id)} [:li (card :name)]
-     )
-   ]
+     ^{:key (card :id)} [:li (card :name)])])
 
-  )
+(defn cards-you-own []
+  (render-card-list (@app-state :my-cards)))
+
+(defn all-cards []
+  (render-card-list (@app-state :all-cards)))
+
+(defn missing-cards []
+  (let [all-cards (@app-state :all-cards)
+        my-cards (@app-state :my-cards)
+        my-card-names (into #{} (map :name) my-cards)
+        missing-cards (filter
+                        (fn [a-card]
+                          (not (contains? my-card-names (a-card :name))))
+                        all-cards)]
+    (js/console.log "foo")
+    (js/console.log (count all-cards))
+    (js/console.log (count my-cards))
+    (js/console.log (clj->js (take 10 my-card-names)))
+    (render-card-list missing-cards)))
+
+(defn render-app []
+  [:div
+   [:h1 "your collection"]
+   [cards-you-own]
+   [:h1 "all cards"]
+   [all-cards]
+   [:h1 "missing cards"]
+   [missing-cards]])
 
 (defn ^:export main []
   (GET "/all_cards.json" {:handler         #(swap! app-state assoc :all-cards %)
@@ -80,6 +107,6 @@
 
   (GET "/my_collection.csv" {:handler handle-my-cards})
 
-  (r/render-component [foo]
+  (r/render-component [render-app]
                       (js/document.getElementById "app")))
 
