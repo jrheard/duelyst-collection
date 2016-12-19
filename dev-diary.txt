@@ -28,3 +28,11 @@ matter of fact, i like that a lot. i'll do that now, i think it'll make reasonin
 lol oh shit i think i don't even need the listlyst dump, whoops
 
 i uh guess i should delete that file
+
+actually nvm
+the csv dump doesn't include which set the cards are in
+so i think there's still some value in having both listlyst and the csv dump
+
+ugh never mind, i asked in discord and t2k5 says he's going to release something that solves this
+and i should really get back to self-driving car stuff
+sooooo i am going to abandon this repo.
