@@ -2,53 +2,31 @@
   (:require
     [clojure.reader :refer [read-string]]
     [clojure.spec :as s]
-    [clojure.string :refer [split lower-case replace]]))
-
-; TODO change to cljc
-; actually just move the specs to a cljc spec file
-
-; here's an example card from json:
-; {
-; "description": "Turn a 2x2 area into Shadow Creep.",
-; "faction": "Abyssian Host",
-; "race": "Spell", <---- ????????
-; "name": "Shadow Nova",
-; "lastModifed": 1.71,
-; "type": "Spell", <----- ????? dupe?
-; "created": 0.01,
-; "manaCost": 4,
-; "id": 20051,
-; "set": "Base",
-; "rarity": "Basic"
-; }
+    [clojure.string :refer [split lower-case replace]]
+    [duelyst-collection.card-list :refer [all-cards-by-name]]
+    [duelyst-collection.specs]))
 
 ; here's an example card csv line:
 ; headers ["Count", "Name", "Faction", "Rarity", "Prismatic", "Cost", "DE Value"]
 ; "0","Snow Rippler","Vanar","Common","false","40","10"
 ; note that set isn't included
 
-; ok so are there two different kinds of cards?
-; there's a canonical card
-; and a collection card
-; seems gross
-; what if we merge the two sources of truth into one?
-; so we parse the collection first so we can get a mapping of name -> id
-; and ::prismatic is an optional key
-
-(s/def ::card (s/keys :req [::count ::name ::faction ::rarity ::pristmatic ::cost ::de-value]))
+(s/def :csv-dump/count nat-int?)
+(s/def :csv-dump/name string?)
+(s/def :csv-dump/card (s/keys :req [:csv-dump/count :csv-dump/name]))
 
 (def csv-field-parsers
   [[:count js/parseInt]
    [:name str]
    [:faction str]
    [:rarity str]
-   [:prismatic boolean]
+   [:prismatic #(= % "true")]
    [:cost js/parseInt]
    [:de-value js/parseInt]])
 
-(defn parse-csv-card-line [card-line]
-  (js/console.log card-line)
-
+(defn parse-csv-card-line
+  "Takes a line from the CSV dump and turns it into a map."
+  [card-line]
   (let [fields (-> card-line
                    (subs 1 (- (count card-line)
                               2))
@@ -72,6 +50,23 @@
                         (drop 3 $))
         _ (validate-csv-header (first csv-lines))
         card-lines (rest csv-lines)
-        parsed-cards (map parse-csv-card-line card-lines)]
-    parsed-cards))
+        parsed-cards (map parse-csv-card-line card-lines)
+        card-pairs (partition 2 parsed-cards)]
 
+    (map (fn [[nonprismatic-card prismatic-card]]
+           (let [master-card (get all-cards-by-name
+                                  (lower-case (nonprismatic-card :name)))]
+
+             (assert (not (nil? master-card)))
+
+             {:card/card        master-card
+              :collection/count (+ (nonprismatic-card :count)
+                                   (prismatic-card :count))}))
+         card-pairs)))
+
+(s/fdef parse-collection-csv
+  :args (s/cat :csv-collection-string string?)
+  :ret (s/coll-of :collection/card))
+
+(comment
+  )

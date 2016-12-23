@@ -15,10 +15,6 @@
   (swap! app-state assoc :my-cards (parse/parse-collection-csv response)))
 
 (defn ^:export main []
-  (GET "/all_cards.json" {:handler         #(swap! app-state assoc :all-cards %)
-                          :response-format :json
-                          :keywords?       true})
-
   (GET "/my_collection.csv" {:handler handle-my-cards})
 
   (r/render-component [html/render-app app-state]

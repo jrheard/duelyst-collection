@@ -19,6 +19,10 @@
 (s/def :card/name string?)
 (s/def :card/cost nat-int?)
 
+; note that this doesn't include:
+; cost (to craft, in spirit)
+; de value
+; prismatic
 (s/def :card/card (s/keys :req [:card/faction
                                 :card/rarity
                                 :card/id
@@ -27,9 +31,5 @@
                                 :card/type
                                 :card/set]))
 
-
-; so that's a card, that makes sense
-; and then there's a :collection/card
-; and it's got a :card/card and a :collection/count
-; that sounds good to me
-; composition yo
+(s/def :collection/count nat-int?)
+(s/def :collection/card (s/keys :req [:card/card :collection/count]))

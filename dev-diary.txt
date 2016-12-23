@@ -43,4 +43,5 @@ sooooo i am going to abandon this repo.
 
 ok whatever i'm flying to san antonio and have nothing else to do
 
-
+sticking with using both the csv dump and the listlyst dump
+the latter has ids and card sets, and i like both of those
