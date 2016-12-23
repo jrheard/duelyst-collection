@@ -10,9 +10,6 @@
 (defn cards-you-own [app-state]
   (render-card-list (map :card/card (@app-state :my-cards))))
 
-(defn all-cards []
-  (render-card-list card-list/all-cards))
-
 (defn missing-cards [app-state]
   (let [missing (->> @app-state
                      :my-cards
@@ -29,10 +26,11 @@
 
 (defn render-app [app-state]
   [:div
+   [:h1 "collection completion:"]
+   [:p (str (int (collection/completion-percentage (@app-state :my-cards)))
+            "%")]
    [:h1 "your collection"]
    [cards-you-own app-state]
-   [:h1 "all cards"]
-   [all-cards]
    [:h1 "missing cards (card name: number missing)"]
    [missing-cards app-state]])
 

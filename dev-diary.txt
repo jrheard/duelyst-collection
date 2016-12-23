@@ -77,3 +77,22 @@ any core function that does that. i feel like there must be one though
 
 can't figure out what to google, maybe there's no such function. writing one.
 
+ok nice whatever it was easy to do with reduce
+
+so now we've got the ability to say: these are the cards that you're missing, and how many
+of each you're missing!
+
+so i think it's about time we figure out how we actually want to display all this information.
+
+copy-pasting from day 1 entry:
+
+* % total collection complete
+* number of packs i've opened, measured in average-pack's-worth-of-spirit
+* amount of spirit required to complete collection
+* number of packs remaining to complete collection, measured in APWOS
+* the above broken down per set (classic, battle pets, recent expasion)
+* the above broken down per faction
+* the above broken down per faction and set
+
+i also want a progress bar.
+let's start with % total collection complete, and figure out how to render a progress bar of that
