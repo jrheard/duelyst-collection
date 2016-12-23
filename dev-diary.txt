@@ -45,3 +45,35 @@ ok whatever i'm flying to san antonio and have nothing else to do
 
 sticking with using both the csv dump and the listlyst dump
 the latter has ids and card sets, and i like both of those
+
+made a ton of progress just now.
+right now we're seeing an interesting issue:
+the csv dump sometimes looks like this:
+
+"1","Keeper of the Vale","Neutral","Legendary","false","900","350"
+"1","Keeper of the Vale","Neutral","Legendary","false","900","350"
+"0","Keeper of the Vale","Neutral","Legendary","true","1800","900"
+"0","Keeper of the Vale","Neutral","Legendary","true","1800","900"
+
+whereas usually it looks like this:
+
+"3","Jaxi","Neutral","Common","false","40","10"
+"0","Jaxi","Neutral","Common","true","200","40"
+
+put another way, each card usually has two lines in the csv, but some of them have four.
+i think that this is because of card skins - keeper of the vale has a promotional skin
+that i have a copy of, etc.
+
+right now my code expects each card to always have two lines, so it does a
+(partition 2 parsed-lines), but that's obviously not robust enough.
+what i really want to do is take the list of parsed lines and turn it into a map of
+{name -> list of parsed cards with name}
+but i'm on an airplane and can't google for how to do that, and i don't remember
+any core function that does that. i feel like there must be one though
+
+====
+
+12/23/16
+
+can't figure out what to google, maybe there's no such function. writing one.
+

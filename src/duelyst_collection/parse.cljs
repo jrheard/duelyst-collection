@@ -51,18 +51,23 @@
         _ (validate-csv-header (first csv-lines))
         card-lines (rest csv-lines)
         parsed-cards (map parse-csv-card-line card-lines)
-        card-pairs (partition 2 parsed-cards)]
 
-    (map (fn [[nonprismatic-card prismatic-card]]
-           (let [master-card (get all-cards-by-name
-                                  (lower-case (nonprismatic-card :name)))]
+        parsed-cards-by-name (reduce (fn [acc parsed-card]
+                                       (let [name (lower-case (parsed-card :name))]
+                                         (if (contains? acc name)
+                                           (update acc name conj parsed-card)
+                                           (assoc acc name [parsed-card]))))
+                                     {}
+                                     parsed-cards)]
 
+    (map (fn [[name cards]]
+           (let [master-card (get all-cards-by-name name)]
              (assert (not (nil? master-card)))
 
              {:card/card        master-card
-              :collection/count (+ (nonprismatic-card :count)
-                                   (prismatic-card :count))}))
-         card-pairs)))
+              :collection/count (apply + (map :count cards))}))
+
+         parsed-cards-by-name)))
 
 (s/fdef parse-collection-csv
   :args (s/cat :csv-collection-string string?)
