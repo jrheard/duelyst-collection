@@ -5,8 +5,7 @@
             [duelyst-collection.parse :as parse]))
 
 (defn make-app-state []
-  {:all-cards []
-   :my-cards  []})
+  {:my-cards []})
 
 (defonce app-state
          (r/atom (make-app-state)))

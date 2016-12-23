@@ -9,7 +9,6 @@
 ; here's an example card csv line:
 ; headers ["Count", "Name", "Faction", "Rarity", "Prismatic", "Cost", "DE Value"]
 ; "0","Snow Rippler","Vanar","Common","false","40","10"
-; note that set isn't included
 
 (s/def :csv-dump/count nat-int?)
 (s/def :csv-dump/name string?)
@@ -44,6 +43,7 @@
                    (map read-string $))
              ["Count", "Name", "Faction", "Rarity", "Prismatic", "Cost", "DE Value"])))
 
+; i'd refactor this but this is basically throwaway code so who cares :]
 (defn parse-collection-csv [csv-collection-string]
   (let [csv-lines (as-> csv-collection-string $
                         (split $ #"\n")
@@ -72,6 +72,3 @@
 (s/fdef parse-collection-csv
   :args (s/cat :csv-collection-string string?)
   :ret (s/coll-of :collection/card))
-
-(comment
-  )

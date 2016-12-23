@@ -1,9 +1,8 @@
 (ns duelyst-collection.html
-  (:require [duelyst-collection.card-list :as card-list])
-  )
+  (:require [duelyst-collection.card-list :as card-list]
+            [duelyst-collection.collection :as collection]))
 
 (defn render-card-list [cards]
-  (js/console.log cards)
   [:ul
    (for [card cards]
      ^{:key (card :card/id)} [:li (card :card/name)])])
@@ -15,19 +14,18 @@
   (render-card-list card-list/all-cards))
 
 (defn missing-cards [app-state]
-  ;xxxxxx
-  (let [all-cards (@app-state :all-cards)
-        my-cards (@app-state :my-cards)
-        my-card-names (into #{} (map :name) my-cards)
-        missing-cards (filter
-                        (fn [a-card]
-                          (not (contains? my-card-names (a-card :name))))
-                        all-cards)]
-    ;(js/console.log "foo")
-    ;(js/console.log (count all-cards))
-    ;(js/console.log (count my-cards))
-    ;(js/console.log (clj->js (take 10 my-card-names)))
-    #_(render-card-list missing-cards)))
+  (let [missing (->> @app-state
+                     :my-cards
+                     collection/missing-cards
+                     (sort-by :collection/count)
+                     reverse)]
+
+    [:ul
+     (for [card missing]
+       ^{:key (-> card :card/card :card/id)}
+       [:li
+        [:span.card-name (-> card :card/card :card/name)]
+        [:span.missing-count (str " " (- 3 (card :collection/count)))]])]))
 
 (defn render-app [app-state]
   [:div
@@ -35,6 +33,6 @@
    [cards-you-own app-state]
    [:h1 "all cards"]
    [all-cards]
-   #_[:h1 "missing cards"]
-   #_[missing-cards app-state]])
+   [:h1 "missing cards (card name: number missing)"]
+   [missing-cards app-state]])
 
