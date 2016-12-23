@@ -96,3 +96,21 @@ copy-pasting from day 1 entry:
 
 i also want a progress bar.
 let's start with % total collection complete, and figure out how to render a progress bar of that
+
+ok some time has passed
+here's my rough idea of how to display this information
+overall completion progress bar on top
+then a series of horizontal sections, one for each faction (and neutral)
+each section looks like this:
+progress bar for section completion
+list of missing cards:
+  * in order by mana cost ascending
+  * color of card name denotes its rarity
+  * card set denoted by an icon or letter
+
+undecided on what the actual string should say. examples:
+(2) [B] Foo of Bar: 1
+
+where (2) means mana cost 2, and 1 means you're missing 1 of these, and [B] means Basic
+basically anything along these lines should do the trick, we'll see if i can think of anything
+better but i think that's a fine start
