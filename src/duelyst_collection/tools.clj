@@ -24,11 +24,11 @@
    :card/set     (raw-card "set")})
 
 (s/fdef parse-card
-        :args (s/cat :raw-card map?)
-        :ret :card/card)
+  :args (s/cat :raw-card map?)
+  :ret :card/card)
 
 (comment
-  (map parse-card (get-raw-cards))
-  )
+  (let [parsed (map parse-card (get-raw-cards))]
+    (spit "foo.cljs" (pr-str parsed))))
 
 

@@ -26,3 +26,10 @@
                                 :card/cost
                                 :card/type
                                 :card/set]))
+
+
+; so that's a card, that makes sense
+; and then there's a :collection/card
+; and it's got a :card/card and a :collection/count
+; that sounds good to me
+; composition yo
