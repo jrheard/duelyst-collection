@@ -120,3 +120,20 @@ better but i think that's a fine start
 12/24/16
 
 gonna try to figure out how to have pretty progress bars real quick
+
+i'm seeing some weird fuckin behavior
+.html isn't cleanly importing .collection
+maybe .collection is a bad name?
+as far as i can tell, in js-land, duelyst_collection.collection is out of date
+it somehow knows about a "completion_percentage" fn that no longer exists
+and doesn't know about card-completion-percentage, etc
+maybe a compile error of some sort?
+eh i bet i should just restart chrome. let's try that.
+
+no, issue persists
+ah, shift-refresh fixes it.
+nice.
+
+ugh.
+
+

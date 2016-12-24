@@ -1,5 +1,6 @@
 (ns duelyst-collection.html
   (:require [clojure.spec :as s]
+            [clojure.string :refer [split lower-case]]
             [duelyst-collection.collection :as collection]
             [duelyst-collection.specs :as specs]))
 
@@ -11,29 +12,32 @@
    (for [card cards]
      ^{:key (card :card/id)} [:li (card :card/name)])])
 
-(defn cards-you-own [cards]
-  (render-card-list (map :card/card cards)))
-
 (defn progress-bar [percentage]
   [:div.progress-bar
    [:progress {:value percentage :max 100}]
    [:p.percentage (format-percentage percentage)]])
 
-(defn completion [cards]
-  [:div.completion
-   [:h1 "collection completion:"]
-   [progress-bar (collection/card-completion-percentage cards)]
-   [:h1 "dust completion:"]
-   [progress-bar (collection/dust-completion-percentage cards)]
+(defn completion-progress-bars [cards]
+  [:div.completion-bars
+   [:div.completion-bar
+    [:h2 "completion (measured in cards):"]
+    [progress-bar (collection/card-completion-percentage cards)]]
+   [:div.completion-bar
+    [:h2 "completion (measured in spirit):"]
+    [progress-bar (collection/dust-completion-percentage cards)]]])
 
-   (for [faction (s/form :card/faction)]
-     (let [faction-cards (filter #(= (-> % :card/card :card/faction)
-                                     faction)
-                                 cards)]
-       ^{:key faction}
-       [:div.faction
-        [:p faction]
-        [progress-bar (collection/card-completion-percentage faction-cards)]]))])
+(defn overall-completion [cards]
+  [:div.overall-completion.section
+   [:h1 "Overall"]
+   [completion-progress-bars cards]])
+
+(defn faction-completion [faction cards]
+  [:div.faction-completion.section {:class (-> faction
+                                       (split #" ")
+                                       first
+                                       lower-case)}
+   [:h1 faction]
+   [completion-progress-bars cards]])
 
 (defn missing-cards [cards]
   (let [missing (->> cards
@@ -51,9 +55,16 @@
 (defn render-app [app-state]
   (let [cards (@app-state :my-cards)]
     [:div
-     [completion cards]
-     [:h1 "your collection"]
-     [cards-you-own cards]
+     [overall-completion cards]
+
+     (for [faction (s/form :card/faction)]
+       (let [faction-cards (filter #(= (-> % :card/card :card/faction)
+                                       faction)
+                                   cards)]
+         ^{:key faction}
+         [faction-completion faction faction-cards]))
+
+
      [:h1 "missing cards (card name: number missing)"]
-     [missing-cards cards]]))
+     #_[missing-cards cards]]))
 

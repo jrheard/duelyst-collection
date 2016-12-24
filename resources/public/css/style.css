@@ -5,8 +5,18 @@ body {
     color: #333;
 }
 
+h1 {
+    font-size: 30px;
+    margin: 10px 0;
+}
+
+h2 {
+    font-size: 20px;
+    margin: 4px 0;
+}
+
 .progress-bar {
-margin:10px 0;
+    margin:5px 0;
 }
 
 progress {
@@ -36,4 +46,9 @@ progress::-moz-progress-bar {
 
 .missing-count {
     font-weight: bold;
+}
+
+.section {
+padding: 20px;
+border: solid 1px #DDD;
 }
