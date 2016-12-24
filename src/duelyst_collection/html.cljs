@@ -13,6 +13,21 @@
    (for [card cards]
      ^{:key (card :card/id)} [:li (card :card/name)])])
 
+(defn missing-cards [cards]
+  (let [missing (->> cards
+                     collection/missing-cards
+                     (sort-by :collection/count)
+                     reverse)]
+
+    [:ul.missing-cards
+     (for [card missing]
+       ^{:key (-> card :card/card :card/id)}
+       [:li
+        [:span.card-name
+         {:class (-> card :card/card :card/rarity lower-case)}
+         (-> card :card/card :card/name)]
+        [:span.missing-count (str " " (- 3 (card :collection/count)))]])]))
+
 (defn progress-bar [percentage]
   [:div.progress-bar
    [:progress {:value percentage :max 100}]
@@ -38,20 +53,8 @@
                                        first
                                        lower-case)}
    [:h1 faction]
-   [completion-progress-bars cards]])
-
-(defn missing-cards [cards]
-  (let [missing (->> cards
-                     collection/missing-cards
-                     (sort-by :collection/count)
-                     reverse)]
-
-    [:ul
-     (for [card missing]
-       ^{:key (-> card :card/card :card/id)}
-       [:li
-        [:span.card-name (-> card :card/card :card/name)]
-        [:span.missing-count (str " " (- 3 (card :collection/count)))]])]))
+   [completion-progress-bars cards]
+   [missing-cards cards]])
 
 (defn render-app [app-state]
   (let [cards (@app-state :my-cards)]
