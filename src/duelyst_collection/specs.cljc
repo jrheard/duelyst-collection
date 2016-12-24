@@ -33,4 +33,5 @@
 
 (s/def :collection/count nat-int?)
 ; TODO - consider having :collection/prismatic-count and :collection/regular-count
-(s/def :collection/card (s/keys :req [:card/card :collection/count]))
+(s/def :collection/spirit-cost nat-int?)
+(s/def :collection/card (s/keys :req [:card/card :collection/count :collection/spirit-cost]))

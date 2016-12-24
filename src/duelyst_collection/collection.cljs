@@ -10,11 +10,23 @@
   :args (s/cat :cards (s/coll-of :collection/card))
   :ret (s/coll-of :collection/card))
 
-(defn completion-percentage [cards]
+(defn card-completion-percentage [cards]
   (* 100
      (/ (apply + (map :collection/count cards))
         (* 3 (count cards)))))
 
-(s/fdef completion-percentage
+(s/fdef card-completion-percentage
+  :args (s/cat :cards (s/coll-of :collection/card))
+  :ret number?)
+
+(defn dust-completion-percentage [cards]
+  (* 100
+     (/ (apply + (map (fn [card]
+                        (* (card :collection/count)
+                           (card :collection/spirit-cost)))
+                      cards))
+        (* 3 (apply + (map :collection/spirit-cost cards))))))
+
+(s/fdef dust-completion-percentage
   :args (s/cat :cards (s/coll-of :collection/card))
   :ret number?)

@@ -65,6 +65,10 @@
              (assert (not (nil? master-card)))
 
              {:card/card        master-card
+              :collection/spirit-cost  (->> cards
+                                     (filter #(= (% :prismatic) false))
+                                     first
+                                     :cost)
               :collection/count (apply + (map :count cards))}))
 
          parsed-cards-by-name)))

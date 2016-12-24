@@ -22,7 +22,9 @@
 (defn completion [cards]
   [:div.completion
    [:h1 "collection completion:"]
-   [progress-bar (collection/completion-percentage cards)]
+   [progress-bar (collection/card-completion-percentage cards)]
+   [:h1 "dust completion:"]
+   [progress-bar (collection/dust-completion-percentage cards)]
 
    (for [faction (s/form :card/faction)]
      (let [faction-cards (filter #(= (-> % :card/card :card/faction)
@@ -31,7 +33,7 @@
        ^{:key faction}
        [:div.faction
         [:p faction]
-        [progress-bar (collection/completion-percentage faction-cards)]]))])
+        [progress-bar (collection/card-completion-percentage faction-cards)]]))])
 
 (defn missing-cards [cards]
   (let [missing (->> cards
