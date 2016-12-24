@@ -20,28 +20,28 @@ h2 {
     margin:5px 0;
 }
 
-.section.abyssian {
-    background-color: #e8aaee;
+.section.abyssian h1 {
+    color: #cb3bd8;
 }
 
-.section.lyonar {
-    background-color: #7AD9ED;
+.section.lyonar h1 {
+    color: #1db8d7;
 }
 
-.section.magmar {
-    background-color: #a7ecc1;
+.section.magmar h1 {
+    color: #27b45d;
 }
 
-.section.songhai {
-    background-color: #f5ae9e;
+.section.songhai h1 {
+    color: #e7421d;
 }
 
-.section.vanar {
-    background-color: #a2cffb;
+.section.vanar h1 {
+    color: #0a7aeb;
 }
 
-.section.vetruvian {
-    background-color: #fcedb1;
+.section.vetruvian h1 {
+    color: #d4ab08;
 }
 
 .section.neutral {
