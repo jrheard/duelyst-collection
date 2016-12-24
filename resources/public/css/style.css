@@ -80,7 +80,6 @@ progress::-moz-progress-bar {
 }
 
 .missing-count {
-    font-weight: bold;
 }
 
 .section {
@@ -103,6 +102,10 @@ ul.missing-cards {
 
 .card-name.legendary {
     color: #eaa861;
+}
+
+.card-name.common {
+    color: #444;
 }
 
 

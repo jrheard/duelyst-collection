@@ -141,3 +141,14 @@ things are looking better now
 i think that maybe setting sections' background color is a bad idea
 i should just set their h1s' font color
 otherwise it gets too busy with the colors of the cards and progress bars, etc
+
+ok awesome things are actually looking pretty good
+
+let's settle on something to display for a particular missing card
+eg
+
+(2) [B] Card Name 3
+
+expansion letters: B, R, D
+
+that seems ok

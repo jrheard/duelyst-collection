@@ -16,17 +16,24 @@
 (defn missing-cards [cards]
   (let [missing (->> cards
                      collection/missing-cards
-                     (sort-by :collection/count)
-                     reverse)]
+                     (sort-by #(-> % :card/card :card/cost)))]
 
     [:ul.missing-cards
      (for [card missing]
        ^{:key (-> card :card/card :card/id)}
        [:li
+        [:span.mana-cost
+         (str "("
+              (-> card :card/card :card/cost)
+              ") ")]
+        [:span.set-name
+         (str "["
+              (-> card :card/card :card/set first)
+              "] ")]
         [:span.card-name
          {:class (-> card :card/card :card/rarity lower-case)}
          (-> card :card/card :card/name)]
-        [:span.missing-count (str " " (- 3 (card :collection/count)))]])]))
+        [:span.missing-count (str ": " (- 3 (card :collection/count)))]])]))
 
 (defn progress-bar [percentage]
   [:div.progress-bar
@@ -49,9 +56,9 @@
 
 (defn faction-completion [faction cards]
   [:div.faction-completion.section {:class (-> faction
-                                       (split #" ")
-                                       first
-                                       lower-case)}
+                                               (split #" ")
+                                               first
+                                               lower-case)}
    [:h1 faction]
    [completion-progress-bars cards]
    [missing-cards cards]])
@@ -72,8 +79,5 @@
 
      [faction-completion
       "Neutral"
-      (filter #(= (-> % :card/card :card/faction) "Neutral") cards)]
-
-     [:h1 "missing cards (card name: number missing)"]
-     #_[missing-cards cards]]))
+      (filter #(= (-> % :card/card :card/faction) "Neutral") cards)]]))
 
