@@ -30,8 +30,11 @@
          (str "["
               (-> card :card/card :card/set first)
               "] ")]
-        [:span.card-name
-         {:class (-> card :card/card :card/rarity lower-case)}
+        [:a.card-name
+         {:class (-> card :card/card :card/rarity lower-case)
+          :href  (str "http://kit.listlyst.com/database/cards/"
+                      (-> card :card/card :card/id))
+          :target "_blank"}
          (-> card :card/card :card/name)]
         [:span.missing-count (str ": " (- 3 (card :collection/count)))]])]))
 
@@ -52,7 +55,11 @@
 (defn overall-completion [cards]
   [:div.overall-completion.section
    [:h1 "Overall"]
-   [completion-progress-bars cards]])
+   [completion-progress-bars cards]
+   [:div.legend
+    [:p "Missing cards look like this:"]
+    [:p "(mana cost) [card set] card name: number of cards missing"]
+    [:p "Card set can be [B] for Base, [R] for Rise of the Bloodborn, or [D] for Denizens of Shim'Zar."]]])
 
 (defn faction-completion [faction cards]
   [:div.faction-completion.section {:class (-> faction

@@ -20,6 +20,16 @@ h2 {
     margin:5px 0;
 }
 
+div.legend {
+    margin-top: 15px;
+    background-color: #DDD;
+    padding: 10px;
+}
+
+div.legend p {
+    margin: 5px 0;
+}
+
 .section.abyssian h1 {
     color: #cb3bd8;
 }
@@ -89,7 +99,12 @@ border: solid 1px #DDD;
 
 ul.missing-cards {
     margin-top: 20px;
-    columns: 4;
+    columns: 2;
+    width: 91%;
+}
+
+.card-name {
+    text-decoration: none;
 }
 
 .card-name.rare {
