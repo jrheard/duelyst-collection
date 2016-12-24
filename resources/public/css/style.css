@@ -1,2 +1,39 @@
 /* some style */
 
+body {
+    font-family: helvetica, sans-serif;
+    color: #333;
+}
+
+.progress-bar {
+margin:10px 0;
+}
+
+progress {
+    width: 400px;
+    height: 30px;
+    background-color: blue;
+}
+
+.progress-bar p.percentage {
+display: inline-block;
+font-size:28px;
+vertical-align:bottom;
+padding-left:10px;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #e0eaf0;
+}
+
+progress::-webkit-progress-value {
+    background-color: #329ad1;
+}
+
+progress::-moz-progress-bar {
+    background-color: #329ad1;
+}
+
+.missing-count {
+    font-weight: bold;
+}

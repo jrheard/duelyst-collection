@@ -14,7 +14,7 @@
   (swap! app-state assoc :my-cards (parse/parse-collection-csv response)))
 
 (defn ^:export main []
-  (GET "/my_collection.csv" {:handler handle-my-cards})
+  (GET "/my_collection_2.csv" {:handler handle-my-cards})
 
   (r/render-component [html/render-app app-state]
                       (js/document.getElementById "app")))

@@ -114,3 +114,9 @@ undecided on what the actual string should say. examples:
 where (2) means mana cost 2, and 1 means you're missing 1 of these, and [B] means Basic
 basically anything along these lines should do the trick, we'll see if i can think of anything
 better but i think that's a fine start
+
+=======
+
+12/24/16
+
+gonna try to figure out how to have pretty progress bars real quick

@@ -11,8 +11,9 @@
   :ret (s/coll-of :collection/card))
 
 (defn completion-percentage [cards]
-  (/ (apply + (map :collection/count cards))
-     (* 3 (count cards))))
+  (* 100
+     (/ (apply + (map :collection/count cards))
+        (* 3 (count cards)))))
 
 (s/fdef completion-percentage
   :args (s/cat :cards (s/coll-of :collection/card))
