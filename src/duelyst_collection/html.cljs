@@ -1,5 +1,6 @@
 (ns duelyst-collection.html
   (:require [clojure.spec :as s]
+            [clojure.set :refer [difference]]
             [clojure.string :refer [split lower-case]]
             [duelyst-collection.collection :as collection]
             [duelyst-collection.specs :as specs]))
@@ -57,13 +58,18 @@
     [:div
      [overall-completion cards]
 
-     (for [faction (s/form :card/faction)]
+     (for [faction (-> :card/faction
+                       s/form
+                       (difference #{"Neutral"})
+                       sort)]
        (let [faction-cards (filter #(= (-> % :card/card :card/faction)
                                        faction)
                                    cards)]
-         ^{:key faction}
-         [faction-completion faction faction-cards]))
+         ^{:key faction} [faction-completion faction faction-cards]))
 
+     [faction-completion
+      "Neutral"
+      (filter #(= (-> % :card/card :card/faction) "Neutral") cards)]
 
      [:h1 "missing cards (card name: number missing)"]
      #_[missing-cards cards]]))

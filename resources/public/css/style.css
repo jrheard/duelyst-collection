@@ -3,6 +3,7 @@
 body {
     font-family: helvetica, sans-serif;
     color: #333;
+    background-color: #EEE;
 }
 
 h1 {
@@ -17,6 +18,33 @@ h2 {
 
 .progress-bar {
     margin:5px 0;
+}
+
+.section.abyssian {
+    background-color: #e8aaee;
+}
+
+.section.lyonar {
+    background-color: #7AD9ED;
+}
+
+.section.magmar {
+    background-color: #a7ecc1;
+}
+
+.section.songhai {
+    background-color: #f5ae9e;
+}
+
+.section.vanar {
+    background-color: #a2cffb;
+}
+
+.section.vetruvian {
+    background-color: #fcedb1;
+}
+
+.section.neutral {
 }
 
 progress {
@@ -34,6 +62,7 @@ padding-left:10px;
 
 progress::-webkit-progress-bar {
     background-color: #e0eaf0;
+    border: solid 1px #CCC;
 }
 
 progress::-webkit-progress-value {
