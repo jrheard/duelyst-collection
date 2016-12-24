@@ -44,7 +44,13 @@ h2 {
     color: #d4ab08;
 }
 
-.section.neutral {
+.completion-bars {
+    overflow: hidden;
+}
+
+.completion-bar {
+    float: left;
+    margin-right: 50px;
 }
 
 progress {

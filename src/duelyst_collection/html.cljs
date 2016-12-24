@@ -21,10 +21,10 @@
 (defn completion-progress-bars [cards]
   [:div.completion-bars
    [:div.completion-bar
-    [:h2 "completion (measured in cards):"]
+    [:h2 "Card-based completion"]
     [progress-bar (collection/card-completion-percentage cards)]]
    [:div.completion-bar
-    [:h2 "completion (measured in spirit):"]
+    [:h2 "Spirit-based completion"]
     [progress-bar (collection/dust-completion-percentage cards)]]])
 
 (defn overall-completion [cards]
