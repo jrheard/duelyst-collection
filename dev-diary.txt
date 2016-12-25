@@ -152,3 +152,12 @@ eg
 expansion letters: B, R, D
 
 that seems ok
+
+ok awesome that went super fucking well
+this is looking pretty good
+i think basically i just need to do a polish pass
+and then hook up file uploading
+and a demo file
+
+and also need to build an explanatory interface for when folks haven't yet uploaded a file
+and tell them to contact me if the thing doesn't work

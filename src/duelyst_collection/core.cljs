@@ -5,16 +5,13 @@
             [duelyst-collection.parse :as parse]))
 
 (defn make-app-state []
-  {:my-cards []})
+  {:collection []})
 
 (defonce app-state
          (r/atom (make-app-state)))
 
-(defn handle-my-cards [response]
-  (swap! app-state assoc :my-cards (parse/parse-collection-csv response)))
-
 (defn ^:export main []
-  (GET "/my_collection_2.csv" {:handler handle-my-cards})
+  ;(GET "/my_collection_2.csv" {:handler handle-my-cards})
 
   (r/render-component [html/render-app app-state]
                       (js/document.getElementById "app")))

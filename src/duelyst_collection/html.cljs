@@ -3,6 +3,7 @@
             [clojure.set :refer [difference]]
             [clojure.string :refer [split lower-case]]
             [duelyst-collection.collection :as collection]
+            [duelyst-collection.parse :as parse]
             [duelyst-collection.specs :as specs]))
 
 (defn format-percentage [percentage]
@@ -31,9 +32,9 @@
               (-> card :card/card :card/set first)
               "] ")]
         [:a.card-name
-         {:class (-> card :card/card :card/rarity lower-case)
-          :href  (str "http://kit.listlyst.com/database/cards/"
-                      (-> card :card/card :card/id))
+         {:class  (-> card :card/card :card/rarity lower-case)
+          :href   (str "http://kit.listlyst.com/database/cards/"
+                       (-> card :card/card :card/id))
           :target "_blank"}
          (-> card :card/card :card/name)]
         [:span.missing-count (str ": " (- 3 (card :collection/count)))]])]))
@@ -70,21 +71,43 @@
    [completion-progress-bars cards]
    [missing-cards cards]])
 
+(defn render-collection [cards]
+  [:div
+   [overall-completion cards]
+
+   (for [faction (-> :card/faction
+                     s/form
+                     (difference #{"Neutral"})
+                     sort)]
+     (let [faction-cards (filter #(= (-> % :card/card :card/faction)
+                                     faction)
+                                 cards)]
+       ^{:key faction} [faction-completion faction faction-cards]))
+
+   [faction-completion
+    "Neutral"
+    (filter #(= (-> % :card/card :card/faction) "Neutral") cards)]])
+
+(defn get-file-contents [file-input app-state]
+  (let [file (aget (.-files file-input)
+                   0)
+        reader (js/FileReader.)]
+    (.addEventListener reader
+                       "loadend"
+                       #(swap! app-state assoc :collection (parse/parse-collection-csv (.-result reader))))
+    (.readAsText reader file)))
+
+(defn initial-ui [app-state]
+  [:div.initial-ui
+   [:p "hello!"]
+
+   [:input {:type      "file"
+            :on-change (fn [e]
+                         (get-file-contents (.-target e) app-state))}]])
+
 (defn render-app [app-state]
-  (let [cards (@app-state :my-cards)]
-    [:div
-     [overall-completion cards]
-
-     (for [faction (-> :card/faction
-                       s/form
-                       (difference #{"Neutral"})
-                       sort)]
-       (let [faction-cards (filter #(= (-> % :card/card :card/faction)
-                                       faction)
-                                   cards)]
-         ^{:key faction} [faction-completion faction faction-cards]))
-
-     [faction-completion
-      "Neutral"
-      (filter #(= (-> % :card/card :card/faction) "Neutral") cards)]]))
+  (let [cards (@app-state :collection)]
+    (if (seq cards)
+      [render-collection cards]
+      [initial-ui app-state])))
 
