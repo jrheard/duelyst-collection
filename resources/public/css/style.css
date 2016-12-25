@@ -20,6 +20,24 @@ strong {
     font-weight: bold;
 }
 
+.initial-ui {
+    width: 500px;
+    margin: 0 auto;
+}
+
+p {
+    margin: 15px 0;
+}
+
+input[type=file] {
+    width: 100%;
+}
+
+p.demo,
+input.demo {
+    display: inline-block;
+}
+
 .progress-bar {
     margin:5px 0;
 }
