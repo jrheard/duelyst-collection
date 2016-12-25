@@ -161,3 +161,7 @@ and a demo file
 
 and also need to build an explanatory interface for when folks haven't yet uploaded a file
 and tell them to contact me if the thing doesn't work
+
+TODO: use listlyst api, fall back to cached version if the API's down or we can't parse its response
+
+TODO add set breakdown to overall completion section

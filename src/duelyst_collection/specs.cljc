@@ -19,10 +19,6 @@
 (s/def :card/name string?)
 (s/def :card/cost nat-int?)
 
-; note that this doesn't include:
-; cost (to craft, in spirit)
-; de value
-; prismatic
 (s/def :card/card (s/keys :req [:card/faction
                                 :card/rarity
                                 :card/id

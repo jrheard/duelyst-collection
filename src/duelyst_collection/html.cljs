@@ -49,12 +49,24 @@
     [:h2 "Completion (in spirit):"]
     [progress-bar (collection/dust-completion-percentage cards)]]])
 
+(defn set-completion [cards]
+  [:div.set-completion
+   (for [a-set (sort (s/form :card/set))]
+     ^{:key a-set}
+     [:div.a-set
+      [:h1 a-set]
+      [completion-progress-bars (filter (fn [card]
+                                          (= (-> card :card/card :card/set)
+                                             a-set))
+                                        cards)]])])
+
 (defn overall-completion [cards]
   [:div.overall-completion.section
    [:h1 "Overall"]
    [completion-progress-bars cards]
+   [set-completion cards]
    [:div.legend
-    [:p "This page will show you which cards you're missing."]
+    [:p "The following sections on page will show you which cards you're missing for each faction."]
     [:p "Missing cards are formatted like this:"]
     [:strong "(mana cost) [card set] card name: number of cards missing"]
     [:p "[card set] can be [B] for Base, [R] for Rise of the Bloodborn, or [D] for Denizens of Shim'Zar."]]])
