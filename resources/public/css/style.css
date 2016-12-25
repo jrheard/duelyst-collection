@@ -16,6 +16,10 @@ h2 {
     margin: 4px 0;
 }
 
+strong {
+    font-weight: bold;
+}
+
 .progress-bar {
     margin:5px 0;
 }
