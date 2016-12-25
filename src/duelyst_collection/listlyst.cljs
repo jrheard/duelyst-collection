@@ -26,7 +26,7 @@
                            (let [parsed-cards (map parse-card result)]
                              (if (s/valid? (s/coll-of :card/card) parsed-cards)
                                (callback-fn parsed-cards)
-                               (js/console.log "Listlyst API returned cards in a format we didn't recognize, using cached card database"))))
+                               (js/console.log "Listlyst API returned cards in a format we didn't recognize, falling back to cached card database"))))
         :error-handler   (fn [{:keys [status status-text failure]}]
-                           (js/console.log "Error talking to the Listlyst API, using cached card database:" status status-text failure))
+                           (js/console.log "Error talking to the Listlyst API, falling back to cached card database:" status status-text failure))
         :response-format :json}))

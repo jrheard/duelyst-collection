@@ -19,6 +19,13 @@
   :args (s/cat :cards (s/coll-of :collection/card))
   :ret number?)
 
+(defn dust-remaining [cards]
+  (- (* 3 (apply + (map :collection/spirit-cost cards)))
+     (apply + (map (fn [card]
+                     (* (card :collection/count)
+                        (card :collection/spirit-cost)))
+                   cards))))
+
 (defn dust-completion-percentage [cards]
   (* 100
      (/ (apply + (map (fn [card]

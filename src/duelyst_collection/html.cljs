@@ -52,13 +52,28 @@
 (defn set-completion [cards]
   [:div.set-completion
    (for [a-set (sort (s/form :card/set))]
-     ^{:key a-set}
-     [:div.a-set
-      [:h1 a-set]
-      [completion-progress-bars (filter (fn [card]
-                                          (= (-> card :card/card :card/set)
-                                             a-set))
-                                        cards)]])])
+     (let [set-cards (filter (fn [card]
+                               (= (-> card :card/card :card/set)
+                                  a-set))
+                             cards)]
+       ^{:key a-set}
+       [:div.a-set
+        [:h1 a-set]
+
+        (let [remaining (collection/dust-remaining set-cards)]
+          (when (and (> remaining 0)
+                     (#{"Base" "Denizens of Shim'Zar"} a-set))
+            ; got these figures from thunder-god on discord
+            (let [spirit-per-pack (if (= a-set "Base")
+                                    220
+                                    200)]
+              [:p (str "It will cost "
+                       (int remaining)
+                       " spirit to complete this set. That's about "
+                       (int (/ remaining spirit-per-pack))
+                       " packs.")])))
+
+        [completion-progress-bars set-cards]]))])
 
 (defn overall-completion [cards]
   [:div.overall-completion.section
