@@ -3,7 +3,6 @@
     [clojure.reader :refer [read-string]]
     [clojure.spec :as s]
     [clojure.string :refer [split lower-case replace]]
-    [duelyst-collection.card-list :refer [all-cards-by-name]]
     [duelyst-collection.specs]))
 
 ; here's an example card csv line:
@@ -44,7 +43,7 @@
              ["Count", "Name", "Faction", "Rarity", "Prismatic", "Cost", "DE Value"])))
 
 ; i'd refactor this but this is basically throwaway code so who cares :]
-(defn parse-collection-csv [csv-collection-string]
+(defn parse-collection-csv [csv-collection-string listlyst-cards]
   (let [csv-lines (as-> csv-collection-string $
                         (split $ #"\n")
                         (drop 3 $))
@@ -61,7 +60,7 @@
                                      parsed-cards)]
 
     (map (fn [[name cards]]
-           (let [master-card (get all-cards-by-name name)]
+           (let [master-card (get listlyst-cards name)]
              (assert (not (nil? master-card)))
 
              {:card/card              master-card

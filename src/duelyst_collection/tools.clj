@@ -4,10 +4,6 @@
             [clojure.spec :as s]
             [duelyst-collection.specs]))
 
-; i don't usually check API keys into version control, but it doesn't seem worth the trouble
-; of doing anything fancier than this here - what do i care if someone steals my listlyst API key?
-(def all-cards-url "http://listlyst.com/api/v1/cards?apikey=6bf31f13f655df3d8626c601a919f925")
-
 (defn get-raw-cards []
   (-> all-cards-url
       client/get
