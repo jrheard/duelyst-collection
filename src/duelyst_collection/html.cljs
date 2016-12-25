@@ -54,8 +54,8 @@
    [:h1 "Overall"]
    [completion-progress-bars cards]
    [:div.legend
-    [:p "The next sections will show you a per-faction breakdown of your completion and which cards you're missing."]
-    [:p "Missing cards look like this:"]
+    [:p "This page will show you which cards you're missing."]
+    [:p "Missing cards are formatted like this:"]
     [:strong "(mana cost) [card set] card name: number of cards missing"]
     [:p "[card set] can be [B] for Base, [R] for Rise of the Bloodborn, or [D] for Denizens of Shim'Zar."]]])
 
