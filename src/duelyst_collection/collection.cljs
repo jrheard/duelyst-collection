@@ -65,8 +65,33 @@
                            :common              0.5730}})
 
 (defn packs-to-complete [cards]
+  ; all these cards should be from the same set.
   (assert (= (count (set (map #(-> % :card/card :card/set) cards)))
              1))
+
+  (let [cards-by-rarity (reduce (fn [acc card]
+                                  (let [rarity (-> card :card/card :card/rarity)]
+                                    (if (contains? acc rarity)
+                                      (update acc rarity conj card)
+                                      (assoc acc rarity [card]))))
+                                {}
+                                cards)
+        percent-owned-by-rarity (into {}
+                                      (for [[rarity cards] cards-by-rarity]
+                                        [rarity (card-completion-percentage cards)]))
+        ]
+    ; TODO i see "token" in here
+    ; TODO oh crap - gravity well and blazing spines
+    ; each of those cards has a duplicate entry with the same name in listlyst
+    ; that's a token minion wall
+    ; gotta change the code in parse (?) to pick the card version instead of the token version
+    (js/console.log (cards-by-rarity "Token"))
+
+    (js/console.log percent-owned-by-rarity)
+
+    )
+
+
 
   10
 
