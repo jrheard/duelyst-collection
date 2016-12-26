@@ -22,7 +22,10 @@
                                                        :card/name
                                                        lower-case)
                                                   identity))
-                                       listlyst-cards))))
+                                       (filter (fn [card]
+                                                 (not= (card :card/rarity)
+                                                       "Token"))
+                                               listlyst-cards)))))
 
   (r/render-component [html/render-app app-state]
                       (js/document.getElementById "app")))

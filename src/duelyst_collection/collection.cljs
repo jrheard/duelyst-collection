@@ -64,53 +64,48 @@
                            :prismatic-common    0.0177
                            :common              0.5730}})
 
-(defn packs-to-complete [cards]
-  ; all these cards should be from the same set.
-  (assert (= (count (set (map #(-> % :card/card :card/set) cards)))
-             1))
+(defn percentage-of-triples [cards]
+  (/ (count (filter (fn [card]
+                      (>= (card :collection/count)
+                          3))
+                    cards))
+     (count cards)))
 
+(defn expected-value-of-a-card [card-set]
   (let [cards-by-rarity (reduce (fn [acc card]
                                   (let [rarity (-> card :card/card :card/rarity)]
                                     (if (contains? acc rarity)
                                       (update acc rarity conj card)
                                       (assoc acc rarity [card]))))
                                 {}
-                                cards)
+                                card-set)
+
         percent-owned-by-rarity (into {}
                                       (for [[rarity cards] cards-by-rarity]
-                                        ; TODO i don't think card-completion-percentage
-                                        ; is the right metric here.
-                                        ; we want to figure out the probability that a new card
-                                        ; for this rarity will be a dupe that you have to DE.
-                                        ; i think that looks something like
-                                        ; (/ (filter #(>= (% :card/count) 3)) (count cards)
-                                        [rarity (card-completion-percentage cards)]))
-        ]
-    ; TODO i see "token" in here
-    ; TODO oh crap - gravity well and blazing spines
-    ; each of those cards has a duplicate entry with the same name in listlyst
-    ; that's a token minion wall
-    ; gotta change the code in parse (?) to pick the card version instead of the token version
-    (js/console.log (cards-by-rarity "Token"))
-
-
+                                        [rarity (percentage-of-triples cards)]))]
     (js/console.log percent-owned-by-rarity)
 
+
+
+    ; i see 108 in basic, that doesn't seem right
+
     )
-
-  ; TODO what we're essentially trying to calculate here is:
-  ; (/ spirit-remaining expected-value-of-a-pack 5)
-  ; with some fudge factor, because expected-value-of-a-pack will diminish as your collection
-  ; becomes more complete, so we can multiply the returned number of orbs by 1.25 or something
-  ; as just a nod to that fact (difficult to simulate it more precisely, all heuristics i can
-  ; come up with are equally garbage).
-
-  ; expected-value-of-a-pack is just expected-value-of-a-card times 5.
-
-
   10
 
   )
+
+(defn packs-to-complete [cards]
+  ; all these cards should be from the same set.
+  (assert (= (count (set (map #(-> % :card/card :card/set) cards)))
+             1))
+
+  (int (* (/ (dust-remaining cards)
+             (* (expected-value-of-a-card cards)
+                5))
+
+          ; fudge factor - as your collection becomes more complete,
+          ; the value of a new orb diminishes.
+          1.25)))
 
 ; TODO all my dust figures seem off
 ; thunder-god says: And your program doesn't account that cards you get for the first time are worth more.
