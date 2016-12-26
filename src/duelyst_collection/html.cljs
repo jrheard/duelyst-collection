@@ -60,11 +60,12 @@
        [:div.a-set
         [:h1 a-set]
 
-        (let [packs-to-complete (collection/packs-to-complete set-cards)]
-          (when (> packs-to-complete 0)
-            [:p (str "It will take ROUGHLY "
-                     packs-to-complete
-                     " orbs to complete this set.")]))
+        (when (not= a-set "Rise of the Bloodborn")
+          (let [packs-to-complete (collection/packs-to-complete set-cards)]
+            (when (> packs-to-complete 0)
+              [:p (str "It will take ROUGHLY "
+                       packs-to-complete
+                       " orbs to complete this set.")])))
 
         [completion-progress-bars set-cards]]))])
 

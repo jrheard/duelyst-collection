@@ -82,22 +82,30 @@
 
         percent-owned-by-rarity (into {}
                                       (for [[rarity cards] cards-by-rarity]
-                                        [rarity (percentage-of-triples cards)]))]
-    (js/console.log percent-owned-by-rarity)
+                                        [rarity (percentage-of-triples cards)]))
 
+        rarity-percentages (card-rarity-probabilities
+                             (-> card-set first :card/card :card/set))]
 
+    (assert (seq rarity-percentages))
 
-    ; i see 108 in basic, that doesn't seem right
+    (apply +
+           (map (fn [rarity]
+                  (+ (* (percent-owned-by-rarity rarity)
+                        (second (card-rarity-values rarity)))
 
-    )
-  10
+                     (* (- 1 (percent-owned-by-rarity rarity))
+                        (first (card-rarity-values rarity)))))
 
-  )
+                (keys card-rarity-values)))))
 
 (defn packs-to-complete [cards]
   ; all these cards should be from the same set.
   (assert (= (count (set (map #(-> % :card/card :card/set) cards)))
              1))
+
+  ; we don't support rise of the bloodborn, because i don't want to think about the math -
+  ; just buy the damn thing.
 
   (int (* (/ (dust-remaining cards)
              (* (expected-value-of-a-card cards)
