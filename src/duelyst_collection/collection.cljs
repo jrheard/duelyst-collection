@@ -89,6 +89,22 @@
 
     (assert (seq rarity-percentages))
 
+    ; two things
+    ; a) i'm never using rarity-percentages
+    ; b) i'm never translating between :common and "Common"
+
+    (js/console.log (keys card-rarity-values))
+    (js/console.log (map (fn [rarity]
+                           [
+                            rarity
+                            (percent-owned-by-rarity rarity)
+                            (second (card-rarity-values rarity))
+                            (- 1 (percent-owned-by-rarity rarity))
+                            (first (card-rarity-values rarity))]
+                           )
+
+                         (keys card-rarity-values)))
+
     (apply +
            (map (fn [rarity]
                   (+ (* (percent-owned-by-rarity rarity)
@@ -104,8 +120,11 @@
   (assert (= (count (set (map #(-> % :card/card :card/set) cards)))
              1))
 
-  ; we don't support rise of the bloodborn, because i don't want to think about the math -
-  ; just buy the damn thing.
+
+  (js/console.log (first cards)
+                  (dust-remaining cards)
+                  (expected-value-of-a-card cards)
+                  )
 
   (int (* (/ (dust-remaining cards)
              (* (expected-value-of-a-card cards)

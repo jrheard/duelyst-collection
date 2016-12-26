@@ -60,7 +60,10 @@
        [:div.a-set
         [:h1 a-set]
 
+        ; we don't support rise of the bloodborn, because i don't want to think about the math -
+        ; just buy the damn thing.
         (when (not= a-set "Rise of the Bloodborn")
+
           (let [packs-to-complete (collection/packs-to-complete set-cards)]
             (when (> packs-to-complete 0)
               [:p (str "It will take ROUGHLY "
