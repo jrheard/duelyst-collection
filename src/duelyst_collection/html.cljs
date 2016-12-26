@@ -60,18 +60,11 @@
        [:div.a-set
         [:h1 a-set]
 
-        (let [remaining (collection/dust-remaining set-cards)]
-          (when (and (> remaining 0)
-                     (#{"Base" "Denizens of Shim'Zar"} a-set))
-            ; got these figures from thunder-god on discord
-            (let [spirit-per-pack (if (= a-set "Base")
-                                    220
-                                    200)]
-              [:p (str "It will cost "
-                       (int remaining)
-                       " spirit to complete this set. That's about "
-                       (int (/ remaining spirit-per-pack))
-                       " packs.")])))
+        (let [packs-to-complete (collection/packs-to-complete set-cards)]
+          (when (> packs-to-complete 0)
+            [:p (str "It will take ROUGHLY "
+                     packs-to-complete
+                     " orbs to complete this set.")]))
 
         [completion-progress-bars set-cards]]))])
 

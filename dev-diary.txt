@@ -164,6 +164,15 @@ and tell them to contact me if the thing doesn't work
 
 TODO: use listlyst api, fall back to cached version if the API's down or we can't parse its response
 
+======
+
+12/25/16
+
 TODO add set breakdown to overall completion section
 
 TODO average packs
+
+ok i think i need to spend some time thinking about and working on a good function that estimates
+how many packs it'll take for you to complete a set.
+
+
