@@ -78,6 +78,12 @@
                                 cards)
         percent-owned-by-rarity (into {}
                                       (for [[rarity cards] cards-by-rarity]
+                                        ; TODO i don't think card-completion-percentage
+                                        ; is the right metric here.
+                                        ; we want to figure out the probability that a new card
+                                        ; for this rarity will be a dupe that you have to DE.
+                                        ; i think that looks something like
+                                        ; (/ (filter #(>= (% :card/count) 3)) (count cards)
                                         [rarity (card-completion-percentage cards)]))
         ]
     ; TODO i see "token" in here
@@ -87,10 +93,19 @@
     ; gotta change the code in parse (?) to pick the card version instead of the token version
     (js/console.log (cards-by-rarity "Token"))
 
+
     (js/console.log percent-owned-by-rarity)
 
     )
 
+  ; TODO what we're essentially trying to calculate here is:
+  ; (/ spirit-remaining expected-value-of-a-pack 5)
+  ; with some fudge factor, because expected-value-of-a-pack will diminish as your collection
+  ; becomes more complete, so we can multiply the returned number of orbs by 1.25 or something
+  ; as just a nod to that fact (difficult to simulate it more precisely, all heuristics i can
+  ; come up with are equally garbage).
+
+  ; expected-value-of-a-pack is just expected-value-of-a-card times 5.
 
 
   10
