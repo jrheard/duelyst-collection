@@ -1,6 +1,5 @@
 (ns duelyst-collection.html
-  (:require [ajax.core :refer [GET]]
-            [clojure.spec :as s]
+  (:require [clojure.spec :as s]
             [clojure.set :refer [difference]]
             [clojure.string :refer [split lower-case]]
             [duelyst-collection.collection :as collection]
@@ -120,7 +119,7 @@
                                                            (@app-state :listlyst-cards))))
     (.readAsText reader file)))
 
-(defn initial-ui [app-state]
+(defn initial-ui [app-state demo-fn]
   [:div.initial-ui
    [:h1 "Duelyst Collection Completion Tool"]
 
@@ -144,13 +143,7 @@
    [:p.demo "If you don't have a CSV file and want to see what the tool looks like, "]
 
    [:input.demo {:type     "button"
-                 :on-click #(GET "/my_collection_2.csv"
-                                 {:handler (fn [result]
-                                             (swap! app-state
-                                                    assoc
-                                                    :collection
-                                                    (parse/parse-collection-csv result
-                                                                                (@app-state :listlyst-cards))))})
+                 :on-click demo-fn
                  :value    "click here to see it operate on my collection."}]
 
    [:p "If this tool breaks, falls out of date, or seems like it's doing something wrong, open an issue on the"
@@ -159,9 +152,9 @@
     [:a {:href "https://twitter.com/jrheard"} "Twitter"]
     "."]])
 
-(defn render-app [app-state]
+(defn render-app [app-state demo-fn]
   (let [cards (@app-state :collection)]
     (if (seq cards)
       [render-collection cards]
-      [initial-ui app-state])))
+      [initial-ui app-state demo-fn])))
 

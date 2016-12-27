@@ -104,9 +104,6 @@
   (assert (= (count (set (map #(-> % :card/card :card/set) cards)))
              1))
 
-  (js/console.log (* (expected-value-of-a-card cards)
-                5))
-
   (int (* (/ (dust-remaining cards)
              (* (expected-value-of-a-card cards)
                 5))

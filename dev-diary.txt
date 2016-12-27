@@ -219,3 +219,6 @@ anything?
 
 i can't really think of anything else i want this to do
 i guess now let's try to get a prod build going
+
+oh right, i wanted to hook up a simple ?demo query-string param
+so let's do that
