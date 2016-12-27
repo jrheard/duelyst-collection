@@ -110,13 +110,16 @@
   (assert (= (count (set (map #(-> % :card/card :card/set) cards)))
              1))
 
+  (js/console.log (* (expected-value-of-a-card cards)
+                5))
+
   (int (* (/ (dust-remaining cards)
              (* (expected-value-of-a-card cards)
                 5))
 
           ; arbitrarily chosen fudge factor - as your collection becomes more complete,
           ; the value of a new orb diminishes.
-          1.15)))
+          1.0)))
 
 (defn dust-completion-percentage [cards]
   (* 100

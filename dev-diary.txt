@@ -175,4 +175,22 @@ TODO average packs
 ok i think i need to spend some time thinking about and working on a good function that estimates
 how many packs it'll take for you to complete a set.
 
+======
 
+12/27/16
+
+ok, the packs-to-completion equation runs successfully
+i'm not super confident in its output, though
+on my_collection.csv, i see:
+base: card completion 50%, spirit completion 22%, 356 orbs to complete set
+shimzar: card completion 10%, spirit completion 2%, 149 orbs to complete set
+
+on my_collection_2.csv, i see:
+base: card completion 62%, spirit completion 28%, 366 orbs to complete set
+shimzar: card completion 20%, spirit completion 5%, 152 orbs to complete set
+
+so, like, as you open more orbs, your orbs-left-to-completion number _rises_.
+that seems incorrect.
+i think what's happening here is that we're saying that the spirit value of each orb decreases
+as your collection becomes more complete, which makes sense
+so like it's _possible_ that these figures are correct in _some_ sense, but they feel like nonsense
