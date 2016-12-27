@@ -1,5 +1,6 @@
 (ns duelyst-collection.collection
   (:require [clojure.spec :as s]
+            [clojure.string :refer [lower-case split]]
             [duelyst-collection.specs]))
 
 (defn missing-cards [cards]
@@ -82,61 +83,41 @@
 
         percent-owned-by-rarity (into {}
                                       (for [[rarity cards] cards-by-rarity]
-                                        [rarity (percentage-of-triples cards)]))
+                                        [(keyword (lower-case rarity))
+                                         (percentage-of-triples cards)]))
 
-        rarity-percentages (card-rarity-probabilities
-                             (-> card-set first :card/card :card/set))]
+        chances-to-open-by-rarity (card-rarity-probabilities
+                                    (-> card-set first :card/card :card/set))]
 
-    (assert (seq rarity-percentages))
+    (apply + (for [[rarity chance-to-open] chances-to-open-by-rarity]
+               (let [[value-of-new value-of-dupe] (card-rarity-values rarity)
+                     rarity-regardless-of-prismatic-status (if (>= (.indexOf (name rarity) "-") 0)
+                                                             (-> rarity
+                                                                 name
+                                                                 (split #"-")
+                                                                 second
+                                                                 keyword)
+                                                             rarity)
 
-    ; two things
-    ; a) i'm never using rarity-percentages
-    ; b) i'm never translating between :common and "Common"
-
-    (js/console.log (keys card-rarity-values))
-    (js/console.log (map (fn [rarity]
-                           [
-                            rarity
-                            (percent-owned-by-rarity rarity)
-                            (second (card-rarity-values rarity))
-                            (- 1 (percent-owned-by-rarity rarity))
-                            (first (card-rarity-values rarity))]
-                           )
-
-                         (keys card-rarity-values)))
-
-    (apply +
-           (map (fn [rarity]
-                  (+ (* (percent-owned-by-rarity rarity)
-                        (second (card-rarity-values rarity)))
-
-                     (* (- 1 (percent-owned-by-rarity rarity))
-                        (first (card-rarity-values rarity)))))
-
-                (keys card-rarity-values)))))
+                     chance-of-dupe (percent-owned-by-rarity rarity-regardless-of-prismatic-status)
+                     chance-of-new (- 1 chance-of-dupe)]
+                 (* chance-to-open
+                    (+ (* chance-of-new value-of-new)
+                       (* chance-of-dupe value-of-dupe))))))))
 
 (defn packs-to-complete [cards]
   ; all these cards should be from the same set.
   (assert (= (count (set (map #(-> % :card/card :card/set) cards)))
              1))
 
-
-  (js/console.log (first cards)
-                  (dust-remaining cards)
-                  (expected-value-of-a-card cards)
-                  )
-
   (int (* (/ (dust-remaining cards)
              (* (expected-value-of-a-card cards)
                 5))
 
-          ; fudge factor - as your collection becomes more complete,
+          ; arbitrarily chosen fudge factor - as your collection becomes more complete,
           ; the value of a new orb diminishes.
-          1.25)))
+          1.15)))
 
-; TODO all my dust figures seem off
-; thunder-god says: And your program doesn't account that cards you get for the first time are worth more.
-; If you get a legendary you don't have 3 times, it's worth 900 spirit, not 350.
 (defn dust-completion-percentage [cards]
   (* 100
      (/ (apply + (map (fn [card]
