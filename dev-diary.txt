@@ -194,3 +194,21 @@ that seems incorrect.
 i think what's happening here is that we're saying that the spirit value of each orb decreases
 as your collection becomes more complete, which makes sense
 so like it's _possible_ that these figures are correct in _some_ sense, but they feel like nonsense
+
+you know what, maybe the right thing to do here would be to weight the value of opening a new card a little lower
+instead of 900, have a legendary be like 750
+see what that does
+
+tried that; the numbers converge a bit between the two collections, but it's still the case
+that the collection that's more filled out has a higher #-of-orbs-left estimate,
+which still feels bad.
+
+ok next up, i'm getting rid of this logic focused on triples
+and going back to raw card completion percentage
+for calculating the probability that a given card will be a dupe
+i see:
+my_collection
+base 331 orbs to complete, shimzar 149 orbs to complete
+my_collection_2
+base 306 orbs to complete, shimzar 145 orbs to complete
+dude i think we have a winner

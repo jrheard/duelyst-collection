@@ -65,13 +65,6 @@
                            :prismatic-common    0.0177
                            :common              0.5730}})
 
-(defn percentage-of-triples [cards]
-  (/ (count (filter (fn [card]
-                      (>= (card :collection/count)
-                          3))
-                    cards))
-     (count cards)))
-
 (defn expected-value-of-a-card [card-set]
   (let [cards-by-rarity (reduce (fn [acc card]
                                   (let [rarity (-> card :card/card :card/rarity)]
@@ -84,7 +77,7 @@
         percent-owned-by-rarity (into {}
                                       (for [[rarity cards] cards-by-rarity]
                                         [(keyword (lower-case rarity))
-                                         (percentage-of-triples cards)]))
+                                         (card-completion-percentage cards-by-rarity)]))
 
         chances-to-open-by-rarity (card-rarity-probabilities
                                     (-> card-set first :card/card :card/set))]
@@ -101,6 +94,7 @@
 
                      chance-of-dupe (percent-owned-by-rarity rarity-regardless-of-prismatic-status)
                      chance-of-new (- 1 chance-of-dupe)]
+
                  (* chance-to-open
                     (+ (* chance-of-new value-of-new)
                        (* chance-of-dupe value-of-dupe))))))))
