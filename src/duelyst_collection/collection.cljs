@@ -113,7 +113,7 @@
 
           ; arbitrarily chosen fudge factor - as your collection becomes more complete,
           ; the value of a new orb diminishes.
-          1.0)))
+          1.2)))
 
 (defn dust-completion-percentage [cards]
   (* 100
