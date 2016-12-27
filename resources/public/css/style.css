@@ -41,6 +41,7 @@ input.demo {
 
 .progress-bar {
     margin:5px 0;
+    width: 485px;
 }
 
 div.legend {
@@ -123,7 +124,7 @@ border: solid 1px #DDD;
 ul.missing-cards {
     margin-top: 20px;
     columns: 2;
-    width: 91%;
+    width: 94%;
 }
 
 .card-name {
