@@ -34,19 +34,40 @@
 
         [:span.missing-count (str ": " (- 3 (card :collection/count)))]])]))
 
-(defn progress-bar [percentage]
+(defn progress-bar [percentage numerator denominator]
   [:div.progress-bar
-   [:progress {:value percentage :max 100}]
+   [:progress {:value percentage
+               :max   100
+               :title (str numerator
+                           " / "
+                           denominator
+                           " ("
+                           (- denominator numerator)
+                           " remaining)")}]
    [:p.percentage (str (int percentage) "%")]])
 
 (defn completion-progress-bars [cards]
   [:div.completion-bars
    [:div.completion-bar
     [:h2 "Completion (in cards):"]
-    [progress-bar (collection/card-completion-percentage cards)]]
+    [progress-bar
+     (collection/card-completion-percentage cards)
+     (apply + (map (fn [card]
+                     (min
+                       (card :collection/count)
+                       3))
+                   cards))
+     (* 3 (count cards))]]
+
    [:div.completion-bar
     [:h2 "Completion (in spirit):"]
-    [progress-bar (collection/dust-completion-percentage cards)]]])
+    [progress-bar
+     (collection/dust-completion-percentage cards)
+     (apply + (map (fn [card]
+                     (* (card :collection/count)
+                        (card :collection/spirit-cost)))
+                   cards))
+     (* 3 (apply + (map :collection/spirit-cost cards)))]]])
 
 (defn set-completion [cards]
   [:div.set-completion
