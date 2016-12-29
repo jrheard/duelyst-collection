@@ -13,7 +13,11 @@
 
 (defn card-completion-percentage [cards]
   (* 100
-     (/ (apply + (map :collection/count cards))
+     (/ (apply + (map (fn [card]
+                        (min
+                          (card :collection/count)
+                          3))
+                      cards))
         (* 3 (count cards)))))
 
 (s/fdef card-completion-percentage
@@ -77,7 +81,7 @@
         percent-owned-by-rarity (into {}
                                       (for [[rarity cards] cards-by-rarity]
                                         [(keyword (lower-case rarity))
-                                         (card-completion-percentage cards-by-rarity)]))
+                                         (/ (card-completion-percentage cards) 100)]))
 
         chances-to-open-by-rarity (card-rarity-probabilities
                                     (-> card-set first :card/card :card/set))]
@@ -106,11 +110,7 @@
 
   (int (* (/ (dust-remaining cards)
              (* (expected-value-of-a-card cards)
-                5))
-
-          ; arbitrarily chosen fudge factor - as your collection becomes more complete,
-          ; the value of a new orb diminishes.
-          1.2)))
+                5)))))
 
 (defn dust-completion-percentage [cards]
   (* 100
