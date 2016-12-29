@@ -134,7 +134,7 @@
     [:a {:href "https://duelyststats.info/scripts/scriptlist.html#scriptlist-collection-enhancements"} "this script's"]
     " collection export feature, and it shows you a bunch of progress bars and tells you which cards you're missing for each faction."]
 
-   [:p "To use it, just click this button and select your collection's exported CSV file (go generate one if you haven't already):"]
+   [:p "To use it, just click this button and select your collection's exported CSV file (go generate one if you haven't already [be sure to paste your file's contents into notepad/textedit/etc - if you paste it into google docs or something similar, it can get garbled!]):"]
 
    [:input {:type      "file"
             :on-change (fn [e]
